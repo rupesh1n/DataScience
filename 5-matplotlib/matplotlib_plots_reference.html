@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matplotlib Plot Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #2a2a3e;
+    --accent1: #7c6fff;
+    --accent2: #ff6f91;
+    --accent3: #6fffd4;
+    --accent4: #ffd56f;
+    --text: #e8e8f0;
+    --muted: #7878a0;
+    --line: #4ecdc4;
+    --scatter: #ff6b6b;
+    --bar: #a29bfe;
+    --hist: #fd79a8;
+    --pie: #fdcb6e;
+    --box: #74b9ff;
+    --heat: #55efc4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(124,111,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,111,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent3);
+    border: 1px solid rgba(111,255,212,0.3);
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    background: rgba(111,255,212,0.05);
+  }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Filter tabs */
+  .filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 1px;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent1);
+    color: var(--accent1);
+    background: rgba(124,111,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Main table card */
+  .table-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+    animation: fadeUp 0.8s 0.3s ease both;
+    margin-bottom: 48px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    padding: 20px 24px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  th:first-child { width: 160px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(124,111,255,0.05); }
+
+  tbody tr.expanded { background: rgba(124,111,255,0.08); }
+
+  td {
+    padding: 22px 24px;
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* Plot name cell */
+  .plot-name {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .plot-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+
+  .plot-label {
+    font-weight: 700;
+    font-size: 15px;
+    display: block;
+  }
+
+  .plot-cmd {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* When to use tags */
+  .when-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  /* Data type pill */
+  .data-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  /* Example cell */
+  .example-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .example-text strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* Expand row */
+  .expand-row td {
+    padding: 0;
+  }
+
+  .expand-content {
+    display: none;
+    padding: 24px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--border);
+  }
+
+  .expand-content.show { display: block; }
+
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .code-block .comment { color: #4a5568; }
+  .code-block .keyword { color: var(--accent1); }
+  .code-block .string { color: var(--accent3); }
+  .code-block .func { color: var(--accent4); }
+  .code-block .num { color: var(--accent2); }
+
+  .expand-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .expand-section h4 {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 12px;
+  }
+
+  .pros-cons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pro, .con {
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  .pro::before { content: '✓'; color: var(--accent3); flex-shrink: 0; }
+  .con::before { content: '✗'; color: var(--accent2); flex-shrink: 0; }
+
+  /* Mini SVG charts */
+  .mini-chart { 
+    background: #0d0d14; 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Summary cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .summary-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent1);
+  }
+
+  .summary-card .icon { font-size: 32px; margin-bottom: 8px; }
+  .summary-card .name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .summary-card .best-for { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  .chevron {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    color: var(--muted);
+    font-size: 12px;
+    margin-left: 8px;
+  }
+
+  tr.expanded .chevron { transform: rotate(180deg); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .expand-grid { grid-template-columns: 1fr; }
+    td { padding: 16px; }
+    th { padding: 16px; }
+    td:nth-child(4), td:nth-child(5) { display: none; }
+    th:nth-child(4), th:nth-child(5) { display: none; }
+  }
+  @media (max-width: 600px) {
+    td:nth-child(3) { display: none; }
+    th:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="badge">matplotlib · expert reference</div>
+    <h1>Plot Type<br>Encyclopedia</h1>
+    <p class="subtitle">A comprehensive guide to when, why, and how to use each Matplotlib chart type. Click any row to expand.</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterRows('all', this)">All Plots</button>
+    <button class="filter-btn" onclick="filterRows('comparison', this)">Comparison</button>
+    <button class="filter-btn" onclick="filterRows('distribution', this)">Distribution</button>
+    <button class="filter-btn" onclick="filterRows('relationship', this)">Relationship</button>
+    <button class="filter-btn" onclick="filterRows('composition', this)">Composition</button>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Plot Type</th>
+          <th>When to Use</th>
+          <th>Why to Use</th>
+          <th>Data Type</th>
+          <th>Real-World Example</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+
+        <!-- LINE PLOT -->
+        <tr data-category="comparison relationship" onclick="toggleRow(this, 'line')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(78,205,196,0.15);">📈</div>
+              <div>
+                <span class="plot-label" style="color:var(--line)">Line Plot</span>
+                <span class="plot-cmd">plt.plot()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--line);border-color:rgba(78,205,196,0.3);background:rgba(78,205,196,0.08)">Time series</span>
+              <span class="tag" style="color:var(--line);border-color:rgba(78,205,196,0.3);background:rgba(78,205,196,0.08)">Continuous data</span>
+              <span class="tag" style="color:var(--line);border-color:rgba(78,205,196,0.3);background:rgba(78,205,196,0.08)">Trends over time</span>
+            </div>
+          </td>
+          <td>Shows trends, patterns, and changes over a continuous interval. Ideal when order/sequence matters.</td>
+          <td>
+            <span class="data-type">📊 Continuous</span><br>
+            <span class="data-type">📅 Time-based</span><br>
+            <span class="data-type">🔢 Sequential</span>
+          </td>
+          <td class="example-text">
+            <strong>Stock prices</strong> over 1 year — x-axis: dates, y-axis: closing price. Reveals bull/bear trends.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-line">
+          <td colspan="6">
+            <div class="expand-content" id="content-line">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np<br><br>
+<span class="comment"># Monthly temperature data (Jan–Dec)</span><br>
+months = np.arange(<span class="num">1</span>, <span class="num">13</span>)<br>
+temp   = [<span class="num">3</span>,<span class="num">5</span>,<span class="num">10</span>,<span class="num">15</span>,<span class="num">20</span>,<span class="num">25</span>,<span class="num">28</span>,<span class="num">27</span>,<span class="num">22</span>,<span class="num">16</span>,<span class="num">9</span>,<span class="num">4</span>]<br><br>
+plt.<span class="func">plot</span>(months, temp, color=<span class="string">'#4ecdc4'</span>,<br>
+         linewidth=<span class="num">2</span>, marker=<span class="string">'o'</span>)<br>
+plt.<span class="func">title</span>(<span class="string">'Monthly Temperature Trend'</span>)<br>
+plt.<span class="func">xlabel</span>(<span class="string">'Month'</span>); plt.<span class="func">ylabel</span>(<span class="string">'°C'</span>)<br>
+plt.<span class="func">grid</span>(<span class="keyword">True</span>, alpha=<span class="num">0.3</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Clearly shows trends and direction of change</span>
+                    <span class="pro">Supports multiple lines for easy comparison</span>
+                    <span class="pro">Works great with large continuous datasets</span>
+                    <span class="con">Poor for categorical/unordered data</span>
+                    <span class="con">Misleading if data points are too sparse</span>
+                    <span class="con">Can get cluttered with many overlapping lines</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- SCATTER PLOT -->
+        <tr data-category="relationship" onclick="toggleRow(this, 'scatter')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(255,107,107,0.15);">🔵</div>
+              <div>
+                <span class="plot-label" style="color:var(--scatter)">Scatter Plot</span>
+                <span class="plot-cmd">plt.scatter()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--scatter);border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.08)">Correlation</span>
+              <span class="tag" style="color:var(--scatter);border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.08)">2 variables</span>
+              <span class="tag" style="color:var(--scatter);border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.08)">Outlier detection</span>
+            </div>
+          </td>
+          <td>Reveals correlation, clustering, or outliers between two numeric variables. Each point = one observation.</td>
+          <td>
+            <span class="data-type">🔢 Numeric (X)</span><br>
+            <span class="data-type">🔢 Numeric (Y)</span><br>
+            <span class="data-type">🔵 Optional: size/color</span>
+          </td>
+          <td class="example-text">
+            <strong>House size vs. price</strong> — each dot = one house. Positive correlation visible immediately.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-scatter">
+          <td colspan="6">
+            <div class="expand-content" id="content-scatter">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np<br><br>
+<span class="comment"># House size (sqft) vs price ($1000s)</span><br>
+size  = np.random.<span class="func">randint</span>(<span class="num">500</span>, <span class="num">3500</span>, <span class="num">80</span>)<br>
+price = size * <span class="num">0.15</span> + np.random.<span class="func">normal</span>(<span class="num">0</span>,<span class="num">30</span>,<span class="num">80</span>)<br><br>
+plt.<span class="func">scatter</span>(size, price, c=price,<br>
+            cmap=<span class="string">'RdYlGn'</span>, s=<span class="num">60</span>, alpha=<span class="num">0.8</span>)<br>
+plt.<span class="func">colorbar</span>(label=<span class="string">'Price ($1000s)'</span>)<br>
+plt.<span class="func">title</span>(<span class="string">'House Size vs. Price'</span>)<br>
+plt.<span class="func">xlabel</span>(<span class="string">'Size (sqft)'</span>)<br>
+plt.<span class="func">ylabel</span>(<span class="string">'Price ($1000s)'</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Instantly shows positive/negative/no correlation</span>
+                    <span class="pro">Can encode 4 variables (x, y, size, color)</span>
+                    <span class="pro">Excellent for spotting outliers and clusters</span>
+                    <span class="con">Overplotting with very large datasets</span>
+                    <span class="con">Doesn't show distribution density well</span>
+                    <span class="con">Not suitable for categorical X/Y variables</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- BAR PLOT -->
+        <tr data-category="comparison" onclick="toggleRow(this, 'bar')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(162,155,254,0.15);">📊</div>
+              <div>
+                <span class="plot-label" style="color:var(--bar)">Bar Plot</span>
+                <span class="plot-cmd">plt.bar()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--bar);border-color:rgba(162,155,254,0.3);background:rgba(162,155,254,0.08)">Categorical compare</span>
+              <span class="tag" style="color:var(--bar);border-color:rgba(162,155,254,0.3);background:rgba(162,155,254,0.08)">Rankings</span>
+              <span class="tag" style="color:var(--bar);border-color:rgba(162,155,254,0.3);background:rgba(162,155,254,0.08)">Counts</span>
+            </div>
+          </td>
+          <td>Comparing discrete categories. Bar height = value. Horizontal bars work better with long category names.</td>
+          <td>
+            <span class="data-type">🏷️ Categorical (X)</span><br>
+            <span class="data-type">🔢 Numeric (Y)</span><br>
+            <span class="data-type">📦 Grouped/Stacked</span>
+          </td>
+          <td class="example-text">
+            <strong>Sales by product</strong> — bars for TV, Laptop, Phone, Tablet. Instantly spot best seller.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-bar">
+          <td colspan="6">
+            <div class="expand-content" id="content-bar">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br><br>
+<span class="comment"># Quarterly revenue comparison</span><br>
+quarters = [<span class="string">'Q1'</span>, <span class="string">'Q2'</span>, <span class="string">'Q3'</span>, <span class="string">'Q4'</span>]<br>
+revenue  = [<span class="num">42</span>, <span class="num">58</span>, <span class="num">73</span>, <span class="num">91</span>]<br>
+colors   = [<span class="string">'#a29bfe'</span>]*<span class="num">3</span> + [<span class="string">'#6c5ce7'</span>]<br><br>
+bars = plt.<span class="func">bar</span>(quarters, revenue, color=colors,<br>
+               edgecolor=<span class="string">'white'</span>, linewidth=<span class="num">0.5</span>)<br>
+<span class="comment"># Add value labels on bars</span><br>
+<span class="keyword">for</span> bar <span class="keyword">in</span> bars:<br>
+    plt.<span class="func">text</span>(bar.get_x()+bar.get_width()/<span class="num">2</span>,<br>
+             bar.get_height()+<span class="num">1</span>, <span class="func">f</span><span class="string">'${bar.get_height()}M'</span>,<br>
+             ha=<span class="string">'center'</span>, fontweight=<span class="string">'bold'</span>)<br>
+plt.<span class="func">title</span>(<span class="string">'Quarterly Revenue'</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Most intuitive chart for non-technical audiences</span>
+                    <span class="pro">Easy to compare magnitudes across categories</span>
+                    <span class="pro">Supports grouped & stacked variants</span>
+                    <span class="con">Cluttered with many categories (>15)</span>
+                    <span class="con">Doesn't show data distribution within groups</span>
+                    <span class="con">Truncated y-axis can mislead viewers</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- HISTOGRAM -->
+        <tr data-category="distribution" onclick="toggleRow(this, 'hist')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(253,121,168,0.15);">📉</div>
+              <div>
+                <span class="plot-label" style="color:var(--hist)">Histogram</span>
+                <span class="plot-cmd">plt.hist()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--hist);border-color:rgba(253,121,168,0.3);background:rgba(253,121,168,0.08)">Distribution shape</span>
+              <span class="tag" style="color:var(--hist);border-color:rgba(253,121,168,0.3);background:rgba(253,121,168,0.08)">Frequency</span>
+              <span class="tag" style="color:var(--hist);border-color:rgba(253,121,168,0.3);background:rgba(253,121,168,0.08)">Skewness check</span>
+            </div>
+          </td>
+          <td>Shows frequency distribution of a single continuous variable. Bins group values into ranges.</td>
+          <td>
+            <span class="data-type">🔢 Continuous (1 var)</span><br>
+            <span class="data-type">📦 Binned groups</span><br>
+            <span class="data-type">🔢 Count/Frequency</span>
+          </td>
+          <td class="example-text">
+            <strong>Exam scores</strong> distribution — bins of 10 pts. Shows if scores are normal, skewed, or bimodal.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-hist">
+          <td colspan="6">
+            <div class="expand-content" id="content-hist">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np<br><br>
+<span class="comment"># Student exam scores (100 students)</span><br>
+scores = np.random.<span class="func">normal</span>(<span class="num">72</span>, <span class="num">12</span>, <span class="num">200</span>)<br>
+scores = np.<span class="func">clip</span>(scores, <span class="num">0</span>, <span class="num">100</span>)<br><br>
+plt.<span class="func">hist</span>(scores, bins=<span class="num">15</span>, color=<span class="string">'#fd79a8'</span>,<br>
+         edgecolor=<span class="string">'white'</span>, alpha=<span class="num">0.85</span>)<br>
+plt.<span class="func">axvline</span>(scores.<span class="func">mean</span>(), color=<span class="string">'red'</span>,<br>
+              linestyle=<span class="string">'--'</span>, label=<span class="string">'Mean'</span>)<br>
+plt.<span class="func">title</span>(<span class="string">'Exam Score Distribution'</span>)<br>
+plt.<span class="func">xlabel</span>(<span class="string">'Score'</span>); plt.<span class="func">ylabel</span>(<span class="string">'Frequency'</span>)<br>
+plt.<span class="func">legend</span>(); plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Reveals distribution shape (normal, skewed, bimodal)</span>
+                    <span class="pro">Shows where most data is concentrated</span>
+                    <span class="pro">Easy to spot gaps or outliers in data</span>
+                    <span class="con">Sensitive to bin size — results vary widely</span>
+                    <span class="con">Can only display one variable at a time</span>
+                    <span class="con">Not useful for categorical data</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- PIE CHART -->
+        <tr data-category="composition" onclick="toggleRow(this, 'pie')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(253,203,110,0.15);">🥧</div>
+              <div>
+                <span class="plot-label" style="color:var(--pie)">Pie Chart</span>
+                <span class="plot-cmd">plt.pie()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--pie);border-color:rgba(253,203,110,0.3);background:rgba(253,203,110,0.08)">Part-to-whole</span>
+              <span class="tag" style="color:var(--pie);border-color:rgba(253,203,110,0.3);background:rgba(253,203,110,0.08)">Proportions</span>
+              <span class="tag" style="color:var(--pie);border-color:rgba(253,203,110,0.3);background:rgba(253,203,110,0.08)">≤6 categories</span>
+            </div>
+          </td>
+          <td>Displays proportions of a whole. Best when one category dominates or you need to show % share.</td>
+          <td>
+            <span class="data-type">🏷️ Categorical</span><br>
+            <span class="data-type">📐 Proportional</span><br>
+            <span class="data-type">🔢 Sums to 100%</span>
+          </td>
+          <td class="example-text">
+            <strong>Market share</strong> of browser usage — Chrome 65%, Safari 19%, Firefox 4%, Others 12%.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-pie">
+          <td colspan="6">
+            <div class="expand-content" id="content-pie">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br><br>
+<span class="comment"># Browser market share</span><br>
+labels  = [<span class="string">'Chrome'</span>,<span class="string">'Safari'</span>,<span class="string">'Firefox'</span>,<span class="string">'Others'</span>]<br>
+sizes   = [<span class="num">65</span>, <span class="num">19</span>, <span class="num">4</span>, <span class="num">12</span>]<br>
+explode = (<span class="num">0.05</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)  <span class="comment"># Highlight Chrome</span><br>
+colors  = [<span class="string">'#fdcb6e'</span>,<span class="string">'#e17055'</span>,<span class="string">'#74b9ff'</span>,<span class="string">'#636e72'</span>]<br><br>
+plt.<span class="func">pie</span>(sizes, labels=labels, colors=colors,<br>
+        explode=explode, autopct=<span class="string">'%1.1f%%'</span>,<br>
+        startangle=<span class="num">90</span>, shadow=<span class="keyword">True</span>)<br>
+plt.<span class="func">title</span>(<span class="string">'Browser Market Share 2024'</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Immediately shows dominant segments</span>
+                    <span class="pro">Familiar and intuitive for all audiences</span>
+                    <span class="pro">Good for showing % of total at a glance</span>
+                    <span class="con">Hard to compare similar-sized slices</span>
+                    <span class="con">Useless with more than 6–7 categories</span>
+                    <span class="con">Experts often prefer bar charts instead</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- BOX PLOT -->
+        <tr data-category="distribution comparison" onclick="toggleRow(this, 'box')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(116,185,255,0.15);">📦</div>
+              <div>
+                <span class="plot-label" style="color:var(--box)">Box Plot</span>
+                <span class="plot-cmd">plt.boxplot()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--box);border-color:rgba(116,185,255,0.3);background:rgba(116,185,255,0.08)">Spread & outliers</span>
+              <span class="tag" style="color:var(--box);border-color:rgba(116,185,255,0.3);background:rgba(116,185,255,0.08)">Group comparison</span>
+              <span class="tag" style="color:var(--box);border-color:rgba(116,185,255,0.3);background:rgba(116,185,255,0.08)">Quartiles</span>
+            </div>
+          </td>
+          <td>Summarizes distribution via 5-number summary: min, Q1, median, Q3, max. Outliers shown as dots.</td>
+          <td>
+            <span class="data-type">🔢 Continuous (Y)</span><br>
+            <span class="data-type">🏷️ Categories (X)</span><br>
+            <span class="data-type">📊 Q1, Median, Q3</span>
+          </td>
+          <td class="example-text">
+            <strong>Salary ranges</strong> across departments — Engineering vs. Sales vs. HR. Shows median & spread instantly.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-box">
+          <td colspan="6">
+            <div class="expand-content" id="content-box">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np<br><br>
+<span class="comment"># Salaries by department ($1000s)</span><br>
+eng  = np.random.<span class="func">normal</span>(<span class="num">110</span>, <span class="num">20</span>, <span class="num">50</span>)<br>
+sales= np.random.<span class="func">normal</span>(<span class="num">80</span>,  <span class="num">25</span>, <span class="num">50</span>)<br>
+hr   = np.random.<span class="func">normal</span>(<span class="num">65</span>,  <span class="num">15</span>, <span class="num">50</span>)<br><br>
+fig, ax = plt.<span class="func">subplots</span>()<br>
+bp = ax.<span class="func">boxplot</span>([eng, sales, hr],<br>
+               labels=[<span class="string">'Eng'</span>,<span class="string">'Sales'</span>,<span class="string">'HR'</span>],<br>
+               patch_artist=<span class="keyword">True</span>,<br>
+               notch=<span class="keyword">True</span>)<br>
+<span class="keyword">for</span> patch, color <span class="keyword">in</span> <span class="func">zip</span>(bp[<span class="string">'boxes'</span>],<br>
+    [<span class="string">'#74b9ff'</span>,<span class="string">'#a29bfe'</span>,<span class="string">'#fd79a8'</span>]):<br>
+    patch.<span class="func">set_facecolor</span>(color)<br>
+plt.<span class="func">title</span>(<span class="string">'Salary by Department'</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Shows 5 statistics in a single compact chart</span>
+                    <span class="pro">Outliers are plotted explicitly</span>
+                    <span class="pro">Perfect for comparing multiple groups side-by-side</span>
+                    <span class="con">Hides sample size and actual data points</span>
+                    <span class="con">Less intuitive for non-technical audiences</span>
+                    <span class="con">Violin plot often better for showing full distribution</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- HEATMAP -->
+        <tr data-category="relationship comparison" onclick="toggleRow(this, 'heat')">
+          <td>
+            <div class="plot-name">
+              <div class="plot-icon" style="background:rgba(85,239,196,0.15);">🟩</div>
+              <div>
+                <span class="plot-label" style="color:var(--heat)">Heatmap</span>
+                <span class="plot-cmd">plt.imshow()</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="when-tags">
+              <span class="tag" style="color:var(--heat);border-color:rgba(85,239,196,0.3);background:rgba(85,239,196,0.08)">Correlation matrix</span>
+              <span class="tag" style="color:var(--heat);border-color:rgba(85,239,196,0.3);background:rgba(85,239,196,0.08)">2D patterns</span>
+              <span class="tag" style="color:var(--heat);border-color:rgba(85,239,196,0.3);background:rgba(85,239,196,0.08)">Pivot tables</span>
+            </div>
+          </td>
+          <td>Encodes magnitude in color across a 2D grid. Ideal for correlation matrices, confusion matrices, pivot tables.</td>
+          <td>
+            <span class="data-type">🏷️ Category (rows)</span><br>
+            <span class="data-type">🏷️ Category (cols)</span><br>
+            <span class="data-type">🌡️ Numeric (color)</span>
+          </td>
+          <td class="example-text">
+            <strong>Feature correlation matrix</strong> — which variables in a dataset are strongly correlated with each other.
+          </td>
+          <td><span class="chevron">▼</span></td>
+        </tr>
+        <tr class="expand-row" id="expand-heat">
+          <td colspan="6">
+            <div class="expand-content" id="content-heat">
+              <div class="expand-grid">
+                <div class="expand-section">
+                  <h4>Python Code Example</h4>
+                  <div class="code-block">
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt<br>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np<br><br>
+<span class="comment"># Correlation matrix (5 features)</span><br>
+feats = [<span class="string">'Age'</span>,<span class="string">'Income'</span>,<span class="string">'Score'</span>,<span class="string">'Hrs'</span>,<span class="string">'Spend'</span>]<br>
+corr  = np.array([<br>
+    [<span class="num">1.0</span>, <span class="num">0.6</span>, <span class="num">0.2</span>,-<span class="num">0.1</span>, <span class="num">0.4</span>],<br>
+    [<span class="num">0.6</span>, <span class="num">1.0</span>, <span class="num">0.3</span>, <span class="num">0.1</span>, <span class="num">0.8</span>],<br>
+    [<span class="num">0.2</span>, <span class="num">0.3</span>, <span class="num">1.0</span>, <span class="num">0.5</span>,-<span class="num">0.2</span>],<br>
+    [-<span class="num">0.1</span>,<span class="num">0.1</span>, <span class="num">0.5</span>, <span class="num">1.0</span>, <span class="num">0.0</span>],<br>
+    [<span class="num">0.4</span>, <span class="num">0.8</span>,-<span class="num">0.2</span>, <span class="num">0.0</span>, <span class="num">1.0</span>]])<br><br>
+im = plt.<span class="func">imshow</span>(corr, cmap=<span class="string">'coolwarm'</span>, vmin=-<span class="num">1</span>)<br>
+plt.<span class="func">colorbar</span>(im); plt.<span class="func">xticks</span>(<span class="func">range</span>(<span class="num">5</span>), feats)<br>
+plt.<span class="func">yticks</span>(<span class="func">range</span>(<span class="num">5</span>), feats)<br>
+plt.<span class="func">title</span>(<span class="string">'Feature Correlation Heatmap'</span>)<br>
+plt.<span class="func">show</span>()
+                  </div>
+                </div>
+                <div class="expand-section">
+                  <h4>Strengths &amp; Limitations</h4>
+                  <div class="pros-cons">
+                    <span class="pro">Reveals patterns in large 2D data grids instantly</span>
+                    <span class="pro">Color encoding lets eyes find hot spots quickly</span>
+                    <span class="pro">Great for confusion matrices in ML models</span>
+                    <span class="con">Colorblind-unfriendly if colormap chosen poorly</span>
+                    <span class="con">Exact values hard to read without annotations</span>
+                    <span class="con">Requires grid-like (matrix) data structure</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="icon">📈</div>
+      <div class="name" style="color:var(--line)">Line Plot</div>
+      <div class="best-for">Trends over time or continuous sequences</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🔵</div>
+      <div class="name" style="color:var(--scatter)">Scatter Plot</div>
+      <div class="best-for">Correlation & relationships between 2 variables</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">📊</div>
+      <div class="name" style="color:var(--bar)">Bar Plot</div>
+      <div class="best-for">Comparing categories side by side</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">📉</div>
+      <div class="name" style="color:var(--hist)">Histogram</div>
+      <div class="best-for">Distribution of a single numeric variable</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🥧</div>
+      <div class="name" style="color:var(--pie)">Pie Chart</div>
+      <div class="best-for">Part-to-whole proportions (≤6 slices)</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">📦</div>
+      <div class="name" style="color:var(--box)">Box Plot</div>
+      <div class="best-for">Spread, median, IQR & outliers by group</div>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🟩</div>
+      <div class="name" style="color:var(--heat)">Heatmap</div>
+      <div class="best-for">Patterns in 2D grids & correlation matrices</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleRow(row, id) {
+    const content = document.getElementById('content-' + id);
+    const isExpanded = row.classList.contains('expanded');
+    
+    // Close all
+    document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('expanded'));
+    document.querySelectorAll('.expand-content').forEach(c => c.classList.remove('show'));
+    
+    if (!isExpanded) {
+      row.classList.add('expanded');
+      content.classList.add('show');
+    }
+  }
+
+  function filterRows(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const rows = document.querySelectorAll('tbody tr:not(.expand-row)');
+    rows.forEach(row => {
+      const cats = row.getAttribute('data-category') || '';
+      if (category === 'all' || cats.includes(category)) {
+        row.style.display = '';
+        // Also show/hide the corresponding expand row
+        const next = row.nextElementSibling;
+        if (next && next.classList.contains('expand-row')) {
+          next.style.display = '';
+        }
+      } else {
+        row.style.display = 'none';
+        const next = row.nextElementSibling;
+        if (next && next.classList.contains('expand-row')) {
+          next.style.display = 'none';
+          // Close expanded content
+          next.querySelector('.expand-content')?.classList.remove('show');
+        }
+        row.classList.remove('expanded');
+      }
+    });
+  }
+</script>
+</body>
+</html>

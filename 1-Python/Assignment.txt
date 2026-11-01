@@ -1,0 +1,142 @@
+Day - 1
+
+
+1) Implement `grade(score)` using if/elif/else rules:  
+   - 90–100: A, 80–89: B, 70–79: C, 60–69: D, <60: E
+2) Write a loop that prints all numbers from 1..50 divisible by 3 but not by 5. 
+Use `continue`.
+3) Write `unique_preserve_order(seq)` → remove duplicates while preserving first occurrence.
+4) Write a program that computes the perimeter and area of a triangle.
+Your program should accept one of the following input modes:
+ 
+By Sides: three side lengths a, b, c
+Right Triangle by Legs: two legs a, b (hypotenuse derived)
+Equilateral: side s
+Isosceles: equal side e and base b
+ 
+The program must:
+ 
+Validate that the inputs form a valid triangle
+Print the perimeter and area.
+ 
+ 
+Input Format
+ 
+First line: a mode keyword from: SIDES, RIGHT, EQUILATERAL, ISOSCELES, COORDS
+Following lines (depending on mode):
+ 
+SIDES: three floats a b c
+RIGHT: two floats a b
+EQUILATERAL: one float s
+ISOSCELES: two floats e b
+COORDS: six floats x1 y1 x2 y2 x3 y3
+ 
+ 
+Geometry Formulas to Use
+1) Validity (Triangle Inequality)
+For sides a, b, c (all > 0):
+ 
+Valid if a + b > c, a + c > b, b + c > a.
+ 
+ 
+2) Perimeter
+ 
+By sides: P = a + b + c
+Right triangle by legs: c = √(a² + b²), then P = a + b + c
+Equilateral with side s: P = 3s
+Isosceles with equal sides e and base b: P = 2e + b
+By coordinates: compute side lengths using distance formula and sum.
+ 
+Distance between (x1, y1) and (x2, y2):
+d = √((x2 - x1)² + (y2 - y1)²)
+ 
+3) Area
+ 
+Heron’s Formula (any triangle with sides a, b, c):
+ 
+s = (a + b + c) / 2 (semiperimeter)
+Area = √(s (s - a) (s - b) (s - c))
+ 
+ 
+Right Triangle with legs a, b:
+ 
+Area = (a * b) / 2
+ 
+ 
+Equilateral with side s:
+ 
+Area = (√3 / 4) * s²
+ 
+ 
+Isosceles with equal sides e and base b:
+ 
+Height h = √(e² - (b/2)²)
+Area = (b * h) / 2
+ 
+ 
+By Coordinates (Shoelace formula for triangle):
+ 
+Area = |x1(y2 − y3) + x2(y3 − y1) + x3(y1 − y2)| / 2
+
+
+Day - 2
+
+
+For a given user session, the raw data captured by the platform is as follows:
+session_data = {
+    "user_id": "  u_1045 ",
+    "device": "mobile",
+    "watch_history": [
+        ("VID101", "the.godfather  ", "Crime", 175),
+        ("VID102", "inception-HD", "Sci-Fi", 148),
+        ("VID103", " The.Dark.Knight ", "Action", 152),
+        ("VID104", "inception-HD", "Sci-Fi", 30)
+    ]
+}
+
+Where each entry in watch_history is a tuple containing:
+(video_id, raw_title, genre, watch_time_in_minutes)
+Tasks
+Using only basic Python constructs (no external libraries):
+String Processing
+Clean user_id by removing extra spaces and converting it to uppercase.
+Clean each raw_title by:
+Removing leading/trailing spaces
+Replacing dots (.) and hyphens (-) with spaces
+Converting the title to title case
+List Processing
+Extract all cleaned video titles into a list
+Create a list of unique genres watched by the user
+Tuple Handling
+Explain briefly why each watch history record is stored as a tuple instead of a list
+Access the genre and watch_time_in_minutes from each tuple without modifying the tuple
+Dictionary Aggregation
+Create a dictionary where:
+Key = genre
+Value = total watch time for that genre
+Example output format:
+Data Science Insight
+Identify the most-watched genre
+Generate a summary string in the format:
+What This Question Assesses
+Strings: data cleaning and normalization (core to feature engineering)
+Lists: sequential data handling and uniqueness logic
+Tuples: immutable event-level data representation
+Dictionaries: aggregation and metric computation
+Data Science Thinking: translating raw media data into insights
+USER U_1045 shows highest engagement with SCI-FI content
+{
+    "Crime": 175,
+    "Sci-Fi": 178,
+    "Action": 152}
+ 
+Data Science Insight
+Identify the most-watched genre
+Generate a summary string in the format:
+What This Question Assesses
+Strings: data cleaning and normalization (core to feature engineering)
+Lists: sequential data handling and uniqueness logic
+Tuples: immutable event-level data representation
+Dictionaries: aggregation and metric computation
+Data Science Thinking: translating raw media data into insights
+USER U_1045 shows highest engagement with SCI-FI content

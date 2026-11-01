@@ -1,0 +1,62 @@
+DB Schema:
+=========
+CREATE TABLE students (
+    student_id   INT PRIMARY KEY AUTO_INCREMENT,
+    name         VARCHAR(100) NOT NULL,
+    city         VARCHAR(50),
+    email        VARCHAR(100)
+);
+
+CREATE TABLE courses (
+    course_id    INT PRIMARY KEY AUTO_INCREMENT,
+    course_name  VARCHAR(100) NOT NULL,
+    category     VARCHAR(50),
+    course_level VARCHAR(20)   -- 'Beginner','Intermediate','Advanced'
+);
+
+CREATE TABLE enrollments (
+    enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
+    student_id    INT NOT NULL,
+    course_id     INT NOT NULL,
+    enrolled_on   DATE NOT NULL,
+    completed_on  DATE NULL,
+    grade         DECIMAL(5,2),
+    CONSTRAINT fk_enr_student
+        FOREIGN KEY (student_id) REFERENCES students(student_id),
+    CONSTRAINT fk_enr_course
+        FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+
+> Insert sample data for the above schema:
+
+
+Subquery tasks (no indexes first):
+===================================
+Task #1: Scalar subquery (overall average grade)
+
+“List students whose average grade across completed courses is above the overall average grade.”
+
+
+Task #2:  – IN subquery (set membership)“List students who are enrolled in at least one Advanced data‑engineering course.”
+
+Task #3: Correlated subquery (per‑student comparison)
+“For each enrollment, show only those where the grade is above that student’s own average grade.”
+
+Task #4 – Derived table (subquery in FROM)
+“For each course, show total number of enrollments and then return only courses with enrollments above the average enrollments per course.”
+
+Task #5 – EXISTS / NOT EXISTS
+“List courses that have no completed enrollments.”
+
+Part B – Index tasks:
+=====================
+> Add indexes; re‑run
+
+Task B1 – Create basic indexesAsk them to propose and then run things like:-- Foreign key / join columns
+
+Task B2 – Composite index reasoning
+
+Task B3 – Unique index - Add a unique index to enforce email uniqueness and show error:
+
+

@@ -1,0 +1,70 @@
+Key Commands for Virtual Environment Demo
+
+Create: python -m venv demo_env
+Activate (Windows): demo_env\Scripts\activate
+Activate (Linux/macOS): source demo_env/bin/activate
+Install Package: pip install <package_name>
+
+>pip install Django
+>django-admin --version
+>django-admin startproject mysite
+cd mysite
+python manage.py runserver
+python manage.py startapp myapp
+
+
+
+
+C:\raviwork\djang-demos\day2>python -m venv day2_env
+ 
+C:\raviwork\djang-demos\day2>day2_env\scripts\activate
+ 
+ 
+(day2_env) C:\raviwork\djang-demos\day2>pip install django
+ 
+(day2_env) C:\raviwork\djang-demos\day2>django-admin startproject workflow
+ 
+(day2_env) C:\raviwork\djang-demos\day2>cd workflow
+ 
+(day2_env) C:\raviwork\djang-demos\day2\workflow>python manage.py startapp todos
+ 
+(day2_env) C:\raviwork\djang-demos\day2\workflow>python manage.py runserver
+
+
+directory - "crud-demo" and                                                                                                          create venv and activate venv and install django. 
+>curd_demo\Scripts\activate 
+>pip install Django
+
+django-admin startproject workflow
+cd workflow
+(curd_demo) D:\DataScience\django\crud-demo\workflow>python manage.py makemigrations   
+(curd_demo) D:\DataScience\django\crud-demo\workflow>python manage.py migrate                                                                                                         create new app > python manage.py startapp customers
+
+(curd_demo) D:\DataScience\django\crud-demo\workflow>python manage.py createsuperuser
+workflow>python manage.py runserver
+
+http://localhost:8000/admin/
+
+
+curl --location 'http://localhost:8000/customers/create/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"name": "Prakash",
+    "email": "prakash@django.com",
+    "phone": "1234567890",
+    "city": "New York"
+}'
+
+Project 
+python -m venv crud-env
+crud-env\scripts\activate
+pip install django
+django-admin startproject HR_WorkSpace
+cd HR_WorkSpace
+python manage.py makemigrations
+python manage.py migrate
+python manage.py startapp analytics
+python manage.py runserver
+
+
+ 

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Workforce Stability Overview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root {
+  --bg:#0b1020; --panel:#121831; --text:#e8ecf1; --muted:#aab3c5; --border:#1f2741;
+  --accent:#4f8cff; --high:#22c55e; --med:#f59e0b; --low:#ef4444;
+  --b1:#60a5fa; --b2:#22c55e; --b3:#f59e0b; --b4:#94a3b8;
+}
+* { box-sizing: border-box; }
+body {
+  margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background: linear-gradient(180deg,#0b1020 0%,#0d1328 100%); color: var(--text);
+}
+header {
+  padding: 18px 20px; border-bottom:1px solid var(--border);
+  position: sticky; top:0; background: rgba(11,16,32,.85); backdrop-filter: blur(6px);
+}
+.container { max-width: 1200px; margin:0 auto; padding:16px; }
+h1 { margin:0 0 6px; font-weight:700; }
+.sub { color:var(--muted); margin:0; }
+
+/* KPI cards */
+.kpi { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-top:12px; }
+@media(max-width:1000px){.kpi{grid-template-columns:1fr 1fr;}}
+.kpi .item { background:#0f1730; border:1px solid var(--border); border-radius:12px; padding:12px; }
+.kpi .label { color: var(--muted); font-size:13px; }
+.kpi .value { font-size:22px; font-weight:700; margin-top:6px; }
+.kpi .delta { font-size:12px; color:#9cc2ff; margin-top:4px; }
+
+/* main grid */
+.grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-top:16px; }
+@media(max-width:1000px){.grid{grid-template-columns:1fr;}}
+
+/* cards */
+.card { background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+  border:1px solid var(--border); border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.25);}
+.toolbar { display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+.btn { background:var(--panel); color:var(--text); border:1px solid var(--border);
+  padding:6px 12px; border-radius:10px; cursor:pointer; font-size:13px; }
+.btn:hover { border-color: var(--accent); color:white; }
+a { color:#9cc2ff; text-decoration:none; } a:hover { text-decoration:underline; }
+.legend { color:var(--muted); font-size:13px; }
+
+/* Chart wrappers for consistent sizing */
+.chart-wrapper { width:100%; display:block; margin:0 auto; }
+.bar-chart-wrapper { height:400px; } /* taller horizontal bar chart */
+.pie-chart-wrapper { width:100%; max-width:360px; height:190px; margin:0 auto; } /* stacked pies: half bar chart each */
+
+/* org split grid: stacked pies */
+.org-split { display:grid; grid-template-columns:1fr; gap:16px; }
+
+/* smaller tweaks */
+footer { color: var(--muted); font-size:13px; margin-top:20px; text-align:center; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>Workforce Stability Overview</h1>
+<p class="sub">Top KPIs with quick visualizations; drill down to detailed dashboards</p>
+</div>
+</header>
+
+<main class="container">
+<!-- KPI cards -->
+<section class="kpi">
+<div class="item"><div class="label">Total Headcount</div><div id="kpiHeadcount" class="value">—</div></div>
+<div class="item"><div class="label">Overall Attrition Rate</div><div id="kpiAttritionRate" class="value">—</div><div id="kpiAttritionCount" class="delta"></div></div>
+<div class="item"><div class="label">Performance (High·Med·Low)</div><div id="kpiPerfSplit" class="value">—</div><div class="delta"><a href="/analytics/performance/dashboard/">View performance dashboard →</a></div></div>
+<div class="item"><div class="label">Tenure: <1y·1–3y·3–5y·>5y</div><div id="kpiTenureSplit" class="value">—</div><div class="delta"><a href="/analytics/tenure/dashboard/">View tenure dashboard →</a></div></div>
+</section>
+
+<div class="grid">
+<!-- Left: Horizontal bar chart -->
+<section class="card">
+<div class="toolbar">
+<button id="refreshBtn" class="btn">↻ Refresh</button>
+<span class="legend">Sources: <code>/api/attrition/</code>, <code>/api/performance/</code>, <code>/api/tenure/</code></span>
+</div>
+<div class="chart-wrapper bar-chart-wrapper">
+<canvas id="attrByDept"></canvas>
+</div>
+<div style="margin-top:2px"><a href="/analytics/attrition/dashboard/">Detailed attrition →</a></div>
+</section>
+
+<!-- Right: Two stacked pie charts -->
+<section class="card">
+<h3 style="margin-top:0; margin-bottom:8px;">Org Split</h3>
+<div class="org-split">
+<div class="chart-block pie-chart-wrapper"><canvas id="perfPie"></canvas></div>
+<div class="chart-block pie-chart-wrapper"><canvas id="tenurePie"></canvas></div>
+</div>
+</section>
+</div>
+</main>
+
+<script>
+const API_ATTR="/api/attrition/";
+const API_PERF="/api/performance/";
+const API_TEN="/api/tenure/";
+let attrChart, perfPie, tenurePie;
+
+function sum(arr){return arr.reduce((a,b)=>a+Number(b||0),0);}
+
+function renderKPI_Attrition(rows){
+  const headcount=sum(rows.map(r=>r.total_employees));
+  const leavers=sum(rows.map(r=>r.attrition_count));
+  const rate=headcount?(leavers/headcount)*100:0;
+  document.getElementById("kpiHeadcount").textContent=headcount.toLocaleString();
+  document.getElementById("kpiAttritionRate").textContent=`${rate.toFixed(2)}%`;
+  document.getElementById("kpiAttritionCount").textContent=`${leavers} separations`;
+}
+
+function renderKPI_Perf(rows){
+  const high=sum(rows.filter(r=>r.segment==='High').map(r=>r.count));
+  const med=sum(rows.filter(r=>r.segment==='Medium').map(r=>r.count));
+  const low=sum(rows.filter(r=>r.segment==='Low').map(r=>r.count));
+  const total=high+med+low||1;
+  document.getElementById("kpiPerfSplit").textContent=`${high} · ${med} · ${low}  (${Math.round(high/total*100)}% · ${Math.round(med/total*100)}% · ${Math.round(low/total*100)}%)`;
+}
+
+function renderKPI_Tenure(rows){
+  const b={'<1 year':0,'1-3 years':0,'3-5 years':0,'>5 years':0};
+  rows.forEach(r=>b[r.tenure_bucket]+=Number(r.count||0));
+  const total=sum(Object.values(b))||1;
+  document.getElementById("kpiTenureSplit").textContent=`${b['<1 year']} · ${b['1-3 years']} · ${b['3-5 years']} · ${b['>5 years']}  (${Math.round(b['<1 year']/total*100)}% · ${Math.round(b['1-3 years']/total*100)}% · ${Math.round(b['3-5 years']/total*100)}% · ${Math.round(b['>5 years']/total*100)}%)`;
+}
+
+function renderAttritionBar(rows){
+  const labels=rows.map(r=>r.department);
+  const data=rows.map(r=>Number(r.attrition_rate));
+  const ctx=document.getElementById("attrByDept").getContext("2d");
+  if(attrChart) attrChart.destroy();
+  attrChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{label:'Attrition Rate (%)',data,backgroundColor:'#ef4444'}]},
+    options:{
+      indexAxis:'y',                  // <-- makes it horizontal
+      responsive:true, maintainAspectRatio:false,
+      datasets:{bar:{barThickness:18,maxBarThickness:22,categoryPercentage:0.85,barPercentage:0.85}},
+      scales:{
+        x:{min:0,max:100,ticks:{color:'#dbe3f4',font:{size:11},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,.08)'}},
+        y:{ticks:{color:'#dbe3f4',font:{size:11}},grid:{display:false}}
+      },
+      plugins:{legend:{display:false},tooltip:{titleFont:{size:11},bodyFont:{size:11},footerFont:{size:10}}}
+    }
+  });
+}
+
+function renderPerfPie(rows){
+  const high=sum(rows.filter(r=>r.segment==='High').map(r=>r.count));
+  const med=sum(rows.filter(r=>r.segment==='Medium').map(r=>r.count));
+  const low=sum(rows.filter(r=>r.segment==='Low').map(r=>r.count));
+  const ctx=document.getElementById("perfPie").getContext("2d");
+  if(perfPie) perfPie.destroy();
+  perfPie=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:['High','Medium','Low'],datasets:[{data:[high,med,low],backgroundColor:['#22c55e','#f59e0b','#ef4444']}]},
+    options:{plugins:{legend:{labels:{color:'#dbe3f4',padding:16},position:'bottom'}},responsive:true,maintainAspectRatio:false}
+  });
+}
+
+function renderTenurePie(rows){
+  const b={'<1 year':0,'1-3 years':0,'3-5 years':0,'>5 years':0};
+  rows.forEach(r=>b[r.tenure_bucket]+=Number(r.count||0));
+  const ctx=document.getElementById("tenurePie").getContext("2d");
+  if(tenurePie) tenurePie.destroy();
+  tenurePie=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:['<1 year','1–3 years','3–5 years','>5 years'],datasets:[{data:[b['<1 year'],b['1-3 years'],b['3-5 years'],b['>5 years']],backgroundColor:['#60a5fa','#22c55e','#f59e0b','#94a3b8']}]},
+    options:{plugins:{legend:{labels:{color:'#dbe3f4',padding:16},position:'bottom'}},responsive:true,maintainAspectRatio:false}
+  });
+}
+
+async function load(){
+  const [attrRes,perfRes,tenRes]=await Promise.all([fetch(API_ATTR),fetch(API_PERF),fetch(API_TEN)]);
+  const [attrRows,perfRows,tenRows]=await Promise.all([attrRes.json(),perfRes.json(),tenRes.json()]);
+  renderKPI_Attrition(attrRows);
+  renderKPI_Perf(perfRows);
+  renderKPI_Tenure(tenRows);
+  renderAttritionBar(attrRows);
+  renderPerfPie(perfRows);
+  renderTenurePie(tenRows);
+}
+
+document.getElementById("refreshBtn").addEventListener("click",load);
+load();
+</script>
+</body>
+</html>

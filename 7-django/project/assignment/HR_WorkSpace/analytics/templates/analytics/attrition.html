@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attrition Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Theme -->
+  <style>
+    :root {
+      --bg: #0b1020; --panel: #121831; --text: #e8ecf1; --muted: #aab3c5; --border: #1f2741;
+      --accent: #4f8cff; --red: #ef4444; --blue: #3b82f6; --green: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0d1328 100%); color: var(--text); }
+    header { padding: 24px 20px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: rgba(11,16,32,.85); backdrop-filter: blur(6px);}
+    .container {
+  width: 100%;
+  padding: 20px 40px;   /* small side padding */
+}
+    h1 { margin: 0 0 6px; font-weight: 700; }
+    .sub { color: var(--muted); margin: 0; }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    @media (min-width: 1000px) { .grid { grid-template-columns: 2fr 1fr; } }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .kpi { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .kpi .item { background: #0f1730; border: 1px solid var(--border); padding: 14px; border-radius: 12px; }
+    .kpi .label { color: var(--muted); font-size: 13px; }
+    .kpi .value { font-size: 24px; font-weight: 700; margin-top: 6px; }
+    .kpi .delta { font-size: 12px; color: #9cc2ff; margin-top: 4px; }
+
+    table { width: 100%; border-collapse: collapse; border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; }
+    thead th { text-align: left; font-weight: 600; padding: 10px; background: #0f1730;
+      color: var(--muted); border-bottom: 1px solid var(--border); }
+    tbody td { padding: 10px; border-bottom: 1px solid var(--border); color: #dbe3f4; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+
+    .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+    .btn { background: var(--panel); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+    .btn:hover { border-color: var(--accent); color: white; }
+    .legend { color: var(--muted); font-size: 13px; }
+    a { color: #9cc2ff; text-decoration: none; } 
+    a:hover { text-decoration: underline; }
+
+    /* ✅ FIX OPTION 1 APPLIED HERE */
+    #attritionChart {
+      height: 180px !important;
+      max-height: 180px;
+      width: 100% !important;
+      display: block;
+    }
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Attrition Dashboard</h1>
+    <p class="sub">Department-wise attrition rate with summary KPIs</p>
+  </div>
+</header>
+
+<main class="container">
+  <section class="kpi">
+    <div class="item">
+      <div class="label">Total Headcount</div>
+      <div id="kpiHeadcount" class="value">—</div>
+    </div>
+    <div class="item">
+      <div class="label">Overall Attrition Rate</div>
+      <div id="kpiAttritionRate" class="value">—</div>
+      <div id="kpiAttritionCount" class="delta"></div>
+    </div>
+    <div class="item">
+      <div class="label">Highest Risk Department</div>
+      <div id="kpiHighestDept" class="value">—</div>
+      <div id="kpiHighestRate" class="delta"></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <div class="toolbar">
+        <button id="refreshBtn" class="btn">↻ Refresh</button>
+        <span class="legend">Source: <code>/api/attrition/</code></span>
+      </div>
+      <!-- ✅ height attribute removed -->
+      <canvas id="attritionChart"></canvas>
+    </section>
+
+    <section class="card">
+      <h3 style="margin-top:0">Department Details</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>Total Employees</th>
+            <th>Attrition Count</th>
+            <th>Attrition Rate (%)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <p style="margin-top:8px;color:#aab3c5">
+        Tip: Click <a href="/analytics/workforce/overview/">Workforce Overview</a> for combined insights.
+      </p>
+    </section>
+  </div>
+</main>
+
+<script>
+  const API_URL = "/api/attrition/";
+  let chart;
+
+  function renderKPIs(rows) {
+    const totals = rows.reduce((acc, r) => {
+      acc.headcount += Number(r.total_employees || 0);
+      acc.leavers += Number(r.attrition_count || 0);
+      return acc;
+    }, { headcount: 0, leavers: 0 });
+
+    const overallRate = totals.headcount ? (totals.leavers / totals.headcount) * 100 : 0;
+    document.getElementById("kpiHeadcount").textContent = totals.headcount.toLocaleString();
+    document.getElementById("kpiAttritionRate").textContent = `${overallRate.toFixed(2)}%`;
+    document.getElementById("kpiAttritionCount").textContent = `${totals.leavers} separations`;
+
+    if (rows.length) {
+      const highest = [...rows].sort((a,b) => Number(b.attrition_rate) - Number(a.attrition_rate))[0];
+      document.getElementById("kpiHighestDept").textContent = highest.department;
+      document.getElementById("kpiHighestRate").textContent = `${Number(highest.attrition_rate).toFixed(2)}%`;
+    }
+  }
+
+  function renderTable(rows) {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.department}</td>
+        <td>${r.total_employees}</td>
+        <td>${r.attrition_count}</td>
+        <td>${Number(r.attrition_rate).toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderChart(rows) {
+    const labels = rows.map(r => r.department);
+    const data = rows.map(r => Number(r.attrition_rate));
+    const ctx = document.getElementById("attritionChart").getContext("2d");
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Attrition Rate (%)",
+          data,
+          backgroundColor: "#ef4444",
+          barThickness: 18,
+          maxBarThickness: 22
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            ticks: { color: "#dbe3f4", callback: v => v + "%" },
+            grid: { color: "rgba(255,255,255,.08)" }
+          },
+          x: {
+            ticks: { color: "#dbe3f4" },
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: "#dbe3f4" } },
+          tooltip: { callbacks: { label: ctx => `${ctx.formattedValue}%` } }
+        }
+      }
+    });
+  }
+
+  async function load() {
+    const res = await fetch(API_URL);
+    const rows = await res.json();
+    renderKPIs(rows);
+    renderTable(rows);
+    renderChart(rows);
+  }
+
+  document.getElementById("refreshBtn").addEventListener("click", load);
+  load();
+</script>
+</body>
+</html>

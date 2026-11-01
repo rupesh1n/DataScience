@@ -1,0 +1,103 @@
+HR
+
+-- Departments
+CREATE TABLE department (
+  dept_id        SERIAL PRIMARY KEY,
+  dept_code      TEXT UNIQUE NOT NULL,
+  dept_name      TEXT NOT NULL,
+  parent_dept_id INT REFERENCES department(dept_id) ON DELETE SET NULL
+);
+
+-- Job roles
+CREATE TABLE job_role (
+  role_id   SERIAL PRIMARY KEY,
+  role_code TEXT UNIQUE NOT NULL,
+  role_name TEXT NOT NULL,
+  job_family TEXT
+);
+
+-- Employees (immutable business identifiers + sensitive PII separated if needed)
+CREATE TABLE employee (
+  emp_id           BIGSERIAL PRIMARY KEY,
+  worker_key       TEXT UNIQUE NOT NULL,   -- from HRIS
+  first_name       TEXT,
+  last_name        TEXT,
+  email            TEXT UNIQUE,
+  date_of_birth    DATE,
+  hire_date        DATE NOT NULL,
+  is_active        BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at       TIMESTAMPTZ DEFAULT now()
+);
+
+-- Employment SCD-2 history
+CREATE TABLE employment_fact (
+  emp_fact_id  BIGSERIAL PRIMARY KEY,
+  emp_id       BIGINT NOT NULL REFERENCES employee(emp_id),
+  dept_id      INT NOT NULL REFERENCES department(dept_id),
+  role_id      INT REFERENCES job_role(role_id),
+  manager_emp_id BIGINT REFERENCES employee(emp_id),
+  location     TEXT,
+  grade        TEXT,
+  employment_type TEXT,    -- FTE, contractor, intern
+  start_date   DATE NOT NULL,
+  end_date     DATE,       -- NULL means current
+  is_current   BOOLEAN GENERATED ALWAYS AS (end_date IS NULL) STORED
+);
+
+-- Exits
+CREATE TABLE event_exit (
+  exit_id        BIGSERIAL PRIMARY KEY,
+  emp_id         BIGINT NOT NULL REFERENCES employee(emp_id),
+  exit_date      DATE NOT NULL,
+  exit_type      TEXT CHECK (exit_type IN ('Voluntary','Involuntary','Retirement','Other')),
+  reason_code    TEXT,
+  regretted_flag BOOLEAN DEFAULT NULL  -- if provided
+);
+
+-- Performance
+CREATE TABLE performance_review (
+  review_id  BIGSERIAL PRIMARY KEY,
+  emp_id     BIGINT NOT NULL REFERENCES employee(emp_id),
+  period_end DATE NOT NULL,
+  rating     NUMERIC(3,2) NOT NULL,   -- e.g., 1–5
+  band       TEXT,                    -- e.g., Exceeds/Meets/Below
+  UNIQUE(emp_id, period_end)
+);
+
+-- Calendar
+CREATE TABLE date_dim AS
+SELECT d::date AS dt,
+       EXTRACT(YEAR FROM d) AS year,
+       EXTRACT(MONTH FROM d) AS month,
+       date_trunc('month', d)::date AS month_start,
+       (date_trunc('month', d) + INTERVAL '1 month - 1 day')::date AS month_end
+FROM generate_series('2015-01-01'::date, '2035-12-31'::date, interval '1 day') AS s(d);
+
+CREATE INDEX ON date_dim(month_start);
+
+
+
+
+Headcount (month-end)
+Employees active on month_end:
+count(distinct emp_id)
+where hire_date <= month_end
+and (no exit before month_end)
+
+Exits in month
+Employees with exit_date in that month.
+Average headcount in month
+(headcount at start + headcount at end) / 2 (or average of daily headcount if precision needed).
+Attrition rate (monthly)
+exits_in_month / average_headcount_in_month
+Rolling 12M attrition
+sum(exits last 12 months) / avg_headcount over same period
+Tenure
+tenure_days = (COALESCE(exit_date, current_date) - hire_date)
+Buckets: <90d, 90–180d, 6–12m, 1–3y, 3–5y, >5y
+Performance segmentation
+
+Rating distribution by dept
+Attrition by rating band (e.g., top 25% vs others)
+Stability: 1 - (exits_top_performers / top_performers_headcount)
+

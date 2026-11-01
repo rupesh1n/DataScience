@@ -1,0 +1,12 @@
+ID,Model,MPG,Price,Engine Size,Horsepower,Seating Capacity
+1,Toyota Camry,30,24000,2500,203,5
+2,Honda Accord,28,22000,2000,192,5
+3,Ford Mustang,20,26000,5000,450,4
+4,Chevrolet Malibu,25,21000,1500,160,5
+5,BMW 3 Series,22,35000,2000,255,5
+6,Audi A4,24,37000,2000,248,5
+7,Mercedes-Benz C-Class,23,40000,2000,255,5
+8,Hyundai Sonata,27,20000,2400,185,5
+9,Kia Optima,26,21000,2400,185,5
+10,Nissan Altima,29,23000,2500,188,5
+11,TATA Nexon,35,20000,1300,170,5

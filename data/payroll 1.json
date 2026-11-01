@@ -1,0 +1,603 @@
+{
+  "company": {
+    "name": "Pramati Systems Pvt Ltd",
+    "cin": "U72900KA2011PTC000999",
+    "tan": "BLRP12345B",
+    "addresses": {
+      "registered": {
+        "line1": "2nd Floor, Tech Park",
+        "line2": "Outer Ring Road, Kadubeesanahalli",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "pincode": "560103"
+      }
+    }
+  },
+  "pay_period": {
+    "month": "January",
+    "year": 2026,
+    "run_date": "2026-02-06"
+  },
+  "employees": [
+    {
+      "employee_id": "EMP001",
+      "personal": {
+        "name": "Aarav Sharma",
+        "gender": "M",
+        "date_of_birth": "1992-07-11"
+      },
+      "employment": {
+        "department": "Engineering",
+        "designation": "Senior Developer",
+        "location": "Bengaluru"
+      },
+      "identifiers": {
+        "PAN": "BDFPS1234K",
+        "Aadhaar_masked": "XXXX-XXXX-1234",
+        "UAN": "101234567890"
+      },
+      "bank": {
+        "bank_name": "HDFC Bank",
+        "ifsc": "HDFC0001234",
+        "account_number_masked": "XXXXXX2101"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 60000,
+          "hra": 30000,
+          "conveyance": 1600,
+          "special_allowance": 18000,
+          "lta": 0,
+          "other_allowances": 4000
+        },
+        "gross_monthly": 113600,
+        "employer_contributions": {
+          "pf": 7200.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 120800.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 21,
+          "lop": 1
+        },
+        "earnings": {
+          "gross": 113600,
+          "reimbursements": 2500
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 8500,
+          "esi_employee": 0,
+          "pf_employee": 7200,
+          "total_deductions": 15900
+        },
+        "net_pay": 97700
+      }
+    },
+    {
+      "employee_id": "EMP002",
+      "personal": {
+        "name": "Nisha Verma",
+        "gender": "F",
+        "date_of_birth": "1995-03-22"
+      },
+      "employment": {
+        "department": "Product",
+        "designation": "Product Manager",
+        "location": "Bengaluru"
+      },
+      "identifiers": {
+        "PAN": "ABCPV4321D",
+        "Aadhaar_masked": "XXXX-XXXX-4321",
+        "UAN": "101234567891"
+      },
+      "bank": {
+        "bank_name": "ICICI Bank",
+        "ifsc": "ICIC0000999",
+        "account_number_masked": "XXXXXX7788"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 90000,
+          "hra": 45000,
+          "conveyance": 1600,
+          "special_allowance": 25000,
+          "lta": 0,
+          "other_allowances": 6000
+        },
+        "gross_monthly": 167600,
+        "employer_contributions": {
+          "pf": 10800.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 178400.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 167600,
+          "reimbursements": 3500
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 16500,
+          "esi_employee": 0,
+          "pf_employee": 10800,
+          "total_deductions": 27500
+        },
+        "net_pay": 140100
+      }
+    },
+    {
+      "employee_id": "EMP003",
+      "personal": {
+        "name": "Rohit Agarwal",
+        "gender": "M",
+        "date_of_birth": "1989-11-05"
+      },
+      "employment": {
+        "department": "Sales",
+        "designation": "Key Account Manager",
+        "location": "Mumbai"
+      },
+      "identifiers": {
+        "PAN": "CKDPA9876F",
+        "Aadhaar_masked": "XXXX-XXXX-9876",
+        "UAN": "101234567892"
+      },
+      "bank": {
+        "bank_name": "SBI",
+        "ifsc": "SBIN0000555",
+        "account_number_masked": "XXXXXX9933"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 70000,
+          "hra": 35000,
+          "conveyance": 1600,
+          "special_allowance": 22000,
+          "lta": 0,
+          "other_allowances": 5000
+        },
+        "gross_monthly": 133600,
+        "employer_contributions": {
+          "pf": 8400.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 142000.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 20,
+          "lop": 2
+        },
+        "earnings": {
+          "gross": 133600,
+          "reimbursements": 1500
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 12000,
+          "esi_employee": 0,
+          "pf_employee": 8400,
+          "total_deductions": 20600
+        },
+        "net_pay": 113000
+      }
+    },
+    {
+      "employee_id": "EMP004",
+      "personal": {
+        "name": "Meera Iyer",
+        "gender": "F",
+        "date_of_birth": "1993-09-14"
+      },
+      "employment": {
+        "department": "HR",
+        "designation": "HR Business Partner",
+        "location": "Chennai"
+      },
+      "identifiers": {
+        "PAN": "DFTPM7654J",
+        "Aadhaar_masked": "XXXX-XXXX-7654",
+        "UAN": "101234567893"
+      },
+      "bank": {
+        "bank_name": "Axis Bank",
+        "ifsc": "UTIB0000123",
+        "account_number_masked": "XXXXXX5522"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 50000,
+          "hra": 25000,
+          "conveyance": 1600,
+          "special_allowance": 15000,
+          "lta": 0,
+          "other_allowances": 3000
+        },
+        "gross_monthly": 94600,
+        "employer_contributions": {
+          "pf": 6000.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 100600.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 94600,
+          "reimbursements": 1200
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 6000,
+          "esi_employee": 0,
+          "pf_employee": 6000,
+          "total_deductions": 12200
+        },
+        "net_pay": 82400
+      }
+    },
+    {
+      "employee_id": "EMP005",
+      "personal": {
+        "name": "Karan Singh",
+        "gender": "M",
+        "date_of_birth": "1990-01-19"
+      },
+      "employment": {
+        "department": "Finance",
+        "designation": "Senior Analyst",
+        "location": "Gurugram"
+      },
+      "identifiers": {
+        "PAN": "GHTPK3456L",
+        "Aadhaar_masked": "XXXX-XXXX-3456",
+        "UAN": "101234567894"
+      },
+      "bank": {
+        "bank_name": "Kotak Mahindra Bank",
+        "ifsc": "KKBK0000432",
+        "account_number_masked": "XXXXXX6611"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 65000,
+          "hra": 32500,
+          "conveyance": 1600,
+          "special_allowance": 17000,
+          "lta": 0,
+          "other_allowances": 4500
+        },
+        "gross_monthly": 120600,
+        "employer_contributions": {
+          "pf": 7800.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 128400.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 120600,
+          "reimbursements": 2000
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 10500,
+          "esi_employee": 0,
+          "pf_employee": 7800,
+          "total_deductions": 18500
+        },
+        "net_pay": 102100
+      }
+    },
+    {
+      "employee_id": "EMP006",
+      "personal": {
+        "name": "Ananya Das",
+        "gender": "F",
+        "date_of_birth": "1996-12-02"
+      },
+      "employment": {
+        "department": "Engineering",
+        "designation": "QA Engineer",
+        "location": "Kolkata"
+      },
+      "identifiers": {
+        "PAN": "PLKTD2345Q",
+        "Aadhaar_masked": "XXXX-XXXX-2345",
+        "UAN": "101234567895"
+      },
+      "bank": {
+        "bank_name": "Punjab National Bank",
+        "ifsc": "PUNB0012345",
+        "account_number_masked": "XXXXXX3344"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 40000,
+          "hra": 20000,
+          "conveyance": 1600,
+          "special_allowance": 8000,
+          "lta": 0,
+          "other_allowances": 3000
+        },
+        "gross_monthly": 72600,
+        "employer_contributions": {
+          "pf": 4800.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 77400.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 21,
+          "lop": 1
+        },
+        "earnings": {
+          "gross": 72600,
+          "reimbursements": 900
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 3200,
+          "esi_employee": 0,
+          "pf_employee": 4800,
+          "total_deductions": 8200
+        },
+        "net_pay": 64400
+      }
+    },
+    {
+      "employee_id": "EMP007",
+      "personal": {
+        "name": "Vikram Rao",
+        "gender": "M",
+        "date_of_birth": "1988-05-28"
+      },
+      "employment": {
+        "department": "Operations",
+        "designation": "Operations Manager",
+        "location": "Hyderabad"
+      },
+      "identifiers": {
+        "PAN": "QWERT1234Z",
+        "Aadhaar_masked": "XXXX-XXXX-1122",
+        "UAN": "101234567896"
+      },
+      "bank": {
+        "bank_name": "State Bank of India",
+        "ifsc": "SBIN0000777",
+        "account_number_masked": "XXXXXX7781"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 75000,
+          "hra": 37500,
+          "conveyance": 1600,
+          "special_allowance": 20000,
+          "lta": 0,
+          "other_allowances": 5500
+        },
+        "gross_monthly": 139600,
+        "employer_contributions": {
+          "pf": 9000.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 148600.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 139600,
+          "reimbursements": 1800
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 13000,
+          "esi_employee": 0,
+          "pf_employee": 9000,
+          "total_deductions": 22200
+        },
+        "net_pay": 117400
+      }
+    },
+    {
+      "employee_id": "EMP008",
+      "personal": {
+        "name": "Priya Nair",
+        "gender": "F",
+        "date_of_birth": "1991-02-10"
+      },
+      "employment": {
+        "department": "Marketing",
+        "designation": "Digital Marketing Lead",
+        "location": "Pune"
+      },
+      "identifiers": {
+        "PAN": "ZXCVB5432N",
+        "Aadhaar_masked": "XXXX-XXXX-2211",
+        "UAN": "101234567897"
+      },
+      "bank": {
+        "bank_name": "HDFC Bank",
+        "ifsc": "HDFC0000888",
+        "account_number_masked": "XXXXXX1144"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 62000,
+          "hra": 31000,
+          "conveyance": 1600,
+          "special_allowance": 16000,
+          "lta": 0,
+          "other_allowances": 4200
+        },
+        "gross_monthly": 114800,
+        "employer_contributions": {
+          "pf": 7440.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 122240.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 114800,
+          "reimbursements": 1600
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 9200,
+          "esi_employee": 0,
+          "pf_employee": 7440,
+          "total_deductions": 16840
+        },
+        "net_pay": 97960
+      }
+    },
+    {
+      "employee_id": "EMP009",
+      "personal": {
+        "name": "Sanjay Patel",
+        "gender": "M",
+        "date_of_birth": "1994-04-04"
+      },
+      "employment": {
+        "department": "Customer Success",
+        "designation": "CS Manager",
+        "location": "Ahmedabad"
+      },
+      "identifiers": {
+        "PAN": "ASDFG6789M",
+        "Aadhaar_masked": "XXXX-XXXX-5566",
+        "UAN": "101234567898"
+      },
+      "bank": {
+        "bank_name": "Bank of Baroda",
+        "ifsc": "BARB0AHMEDA",
+        "account_number_masked": "XXXXXX8899"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 45000,
+          "hra": 22500,
+          "conveyance": 1600,
+          "special_allowance": 9000,
+          "lta": 0,
+          "other_allowances": 3200
+        },
+        "gross_monthly": 81300,
+        "employer_contributions": {
+          "pf": 5400.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 86700.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 21,
+          "lop": 1
+        },
+        "earnings": {
+          "gross": 81300,
+          "reimbursements": 1000
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 4500,
+          "esi_employee": 0,
+          "pf_employee": 5400,
+          "total_deductions": 10100
+        },
+        "net_pay": 71200
+      }
+    },
+    {
+      "employee_id": "EMP010",
+      "personal": {
+        "name": "Neha Gupta",
+        "gender": "F",
+        "date_of_birth": "1997-10-30"
+      },
+      "employment": {
+        "department": "Engineering",
+        "designation": "Data Engineer",
+        "location": "Noida"
+      },
+      "identifiers": {
+        "PAN": "MNOPQ1122R",
+        "Aadhaar_masked": "XXXX-XXXX-7788",
+        "UAN": "101234567899"
+      },
+      "bank": {
+        "bank_name": "Yes Bank",
+        "ifsc": "YESB0000123",
+        "account_number_masked": "XXXXXX6677"
+      },
+      "pay_structure": {
+        "components_monthly": {
+          "basic": 68000,
+          "hra": 34000,
+          "conveyance": 1600,
+          "special_allowance": 18000,
+          "lta": 0,
+          "other_allowances": 4800
+        },
+        "gross_monthly": 126400,
+        "employer_contributions": {
+          "pf": 8160.0,
+          "esi": 0.0
+        },
+        "ctc_monthly": 134560.0
+      },
+      "current_month": {
+        "attendance": {
+          "working_days": 22,
+          "present": 22,
+          "lop": 0
+        },
+        "earnings": {
+          "gross": 126400,
+          "reimbursements": 2200
+        },
+        "deductions": {
+          "professional_tax": 200,
+          "tds": 9800,
+          "esi_employee": 0,
+          "pf_employee": 8160,
+          "total_deductions": 18160
+        },
+        "net_pay": 108240
+      }
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+    "people": [
+        {
+            "id": 1,
+            "person": {
+                "personal_info": {
+                    "name": "Alice Smith",
+                    "age": 28,
+                    "email": "alice@example.com",
+                    "phone": "+1-415-555-0123",
+                    "address": {
+                        "street": "123 Maple St",
+                        "city": "San Francisco",
+                        "state": "CA",
+                        "zip": "94107",
+                        "country": "USA"
+                    }
+                },
+                "work": {
+                    "company": "Tech Corp",
+                    "position": "Developer",
+                    "department": "Platform",
+                    "salary": 75000,
+                    "start_date": "2022-04-18",
+                    "employment_type": "Full-time"
+                },
+                "skills": [
+                    {
+                        "name": "Python",
+                        "level": "Advanced",
+                        "years": 5
+                    },
+                    {
+                        "name": "JavaScript",
+                        "level": "Intermediate",
+                        "years": 3
+                    },
+                    {
+                        "name": "SQL",
+                        "level": "Intermediate",
+                        "years": 4
+                    }
+                ],
+                "certifications": [
+                    {
+                        "name": "AWS Certified Developer - Associate",
+                        "year": 2023
+                    }
+                ],
+                "projects": [
+                    {
+                        "title": "Billing Service Revamp",
+                        "role": "Backend Developer",
+                        "tech_stack": [
+                            "Python",
+                            "FastAPI",
+                            "PostgreSQL",
+                            "Docker"
+                        ],
+                        "open_issues": 2,
+                        "completed": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "person": {
+                "personal_info": {
+                    "name": "Bob Johnson",
+                    "age": 34,
+                    "email": "bob.johnson@example.com",
+                    "phone": "+44-20-7946-0342",
+                    "address": {
+                        "street": "45 Baker St",
+                        "city": "London",
+                        "state": "",
+                        "zip": "NW1 6XE",
+                        "country": "UK"
+                    }
+                },
+                "work": {
+                    "company": "FinAnalytics",
+                    "position": "Data Scientist",
+                    "department": "Research",
+                    "salary": 98000,
+                    "start_date": "2021-09-01",
+                    "employment_type": "Full-time"
+                },
+                "skills": [
+                    {
+                        "name": "Python",
+                        "level": "Advanced",
+                        "years": 7
+                    },
+                    {
+                        "name": "Pandas",
+                        "level": "Advanced",
+                        "years": 6
+                    },
+                    {
+                        "name": "Machine Learning",
+                        "level": "Advanced",
+                        "years": 5
+                    }
+                ],
+                "certifications": [
+                    {
+                        "name": "TensorFlow Developer",
+                        "year": 2022
+                    }
+                ],
+                "projects": [
+                    {
+                        "title": "Credit Risk Model",
+                        "role": "Lead Data Scientist",
+                        "tech_stack": [
+                            "Python",
+                            "scikit-learn",
+                            "XGBoost"
+                        ],
+                        "open_issues": 5,
+                        "completed": false
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "person": {
+                "personal_info": {
+                    "name": "Carol Nguyen",
+                    "age": 30,
+                    "email": "carol.nguyen@example.com",
+                    "phone": "+61-2-5550-8787",
+                    "address": {
+                        "street": "9 Harbour Rd",
+                        "city": "Sydney",
+                        "state": "NSW",
+                        "zip": "2000",
+                        "country": "Australia"
+                    }
+                },
+                "work": {
+                    "company": "HealthTech AU",
+                    "position": "DevOps Engineer",
+                    "department": "SRE",
+                    "salary": 115000,
+                    "start_date": "2020-02-10",
+                    "employment_type": "Contract"
+                },
+                "skills": [
+                    {
+                        "name": "Docker",
+                        "level": "Advanced",
+                        "years": 5
+                    },
+                    {
+                        "name": "Kubernetes",
+                        "level": "Advanced",
+                        "years": 4
+                    },
+                    {
+                        "name": "Terraform",
+                        "level": "Intermediate",
+                        "years": 3
+                    }
+                ],
+                "certifications": [
+                    {
+                        "name": "CKA",
+                        "year": 2021
+                    },
+                    {
+                        "name": "Azure Administrator Associate",
+                        "year": 2020
+                    }
+                ],
+                "projects": [
+                    {
+                        "title": "EHR CI/CD Pipeline",
+                        "role": "DevOps Engineer",
+                        "tech_stack": [
+                            "GitHub Actions",
+                            "Kubernetes",
+                            "Helm",
+                            "Terraform"
+                        ],
+                        "open_issues": 1,
+                        "completed": true
+                    }
+                ]
+            }
+        }
+    ],
+    "generated_on": "2026-02-06",
+    "metadata": {
+        "source": "dummy",
+        "version": 2,
+        "notes": "Sample data for testing scripts that read nested JSON structures."
+    }
+}

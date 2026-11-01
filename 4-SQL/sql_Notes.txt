@@ -1,0 +1,24 @@
+show databases;
+>create database<NAME OF DATABASE>
+>create database ds_sales;
+>use ds_sales;
+>create table customers(customer_id int primary key, order_id int, product varchar(50), price decimal(10,2), order_date date);
+> desc customers;
+> insert into customers values(101, 1, 'laptop', 30000.00, '2026-02-09'), ( 102, 2, 'camera', 20000.00, '2026-02-09');
+>select * from customers;
+
+insert into customers values(103, 1, 'laptop', 30000.00, '2026-02-19'), ( 104, 2, 'camera', 20000.00, '2026-02-19');
+
+
+csv
+
+load data infile 'C:\\ProgramData\\MySQL\\MySQL Server 9.5\\Uploads\\customers.csv' into table
+customers fields terminated by ','
+enclosed by '"'
+lines terminated by '\r\n'
+ignore 1 lines 
+(customer_id,name,email,city);
+
+
+create table customers(customer_id int primary key,name text,email text, city text);
+

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tenure Distribution</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121831;
+      --text: #e8ecf1;
+      --muted: #aab3c5;
+      --border: #1f2741;
+      --b1:#60a5fa;
+      --b2:#22c55e;
+      --b3:#f59e0b;
+      --b4:#94a3b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #0d1328 100%);
+      color: var(--text);
+    }
+
+    header {
+      padding: 24px 40px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(11,16,32,.85);
+      backdrop-filter: blur(6px);
+    }
+
+    /* ✅ FIXED CONTAINER */
+    .container {
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px 40px;
+    }
+
+    h1 { margin: 0 0 6px; font-weight: 700; }
+    .sub { color: var(--muted); margin: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 1000px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      border-color: #4f8cff;
+      color: white;
+    }
+
+    label { color: var(--muted); font-size: 14px; }
+
+    /* ✅ CHART WRAPPER FIX */
+    .chart-wrapper {
+      position: relative;
+      height: 400px;
+      width: 100%;
+    }
+
+    table {
+      width:100%;
+      border-collapse: collapse;
+      border:1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    thead th {
+      text-align: left;
+      font-weight: 600;
+      padding: 12px;
+      background: #0f1730;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      color: #dbe3f4;
+    }
+
+    tbody tr:hover {
+      background: rgba(255,255,255,.03);
+    }
+
+    .legend {
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h1>Tenure Distribution</h1>
+  <p class="sub">Tenure buckets per department; toggle to view as percentages</p>
+</header>
+
+<main class="container">
+  <div class="grid">
+
+    <section class="card">
+      <div class="toolbar">
+        <button id="refreshBtn" class="btn">↻ Refresh</button>
+        <label><input type="checkbox" id="pctToggle" /> Show as % of department</label>
+        <span class="legend">Source: <code>/api/tenure/</code></span>
+      </div>
+
+      <!-- ✅ FIXED HEIGHT CONTAINER -->
+      <div class="chart-wrapper">
+        <canvas id="tenureChart"></canvas>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3 style="margin-top:0">Department x Tenure Buckets</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>&lt;1 year</th>
+            <th>1–3 years</th>
+            <th>3–5 years</th>
+            <th>&gt;5 years</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  const API_URL = "/api/tenure/";
+  let chart;
+  let pivot = {};
+
+  const BUCKETS = ['<1 year', '1-3 years', '3-5 years', '>5 years'];
+  const COLORS  = ['#60a5fa', '#22c55e', '#f59e0b', '#94a3b8'];
+
+  function buildPivot(rows) {
+    pivot = {};
+    rows.forEach(r => {
+      const dep = r.department;
+      const b = r.tenure_bucket;
+      const c = Number(r.count || 0);
+
+      if (!pivot[dep]) {
+        pivot[dep] = {'<1 year':0,'1-3 years':0,'3-5 years':0,'>5 years':0,total:0};
+      }
+
+      pivot[dep][b] += c;
+      pivot[dep].total += c;
+    });
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+
+    Object.keys(pivot).sort().forEach(dep => {
+      const row = pivot[dep];
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${dep}</td>
+        <td>${row['<1 year']}</td>
+        <td>${row['1-3 years']}</td>
+        <td>${row['3-5 years']}</td>
+        <td>${row['>5 years']}</td>
+        <td>${row.total}</td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderChart(asPct=false) {
+    const departments = Object.keys(pivot).sort();
+
+    const datasets = BUCKETS.map((bucket, idx) => {
+      let data = departments.map(dep => pivot[dep][bucket]);
+
+      if (asPct) {
+        data = departments.map(dep => {
+          const t = pivot[dep].total || 1;
+          return (pivot[dep][bucket] / t) * 100;
+        });
+      }
+
+      return {
+        label: bucket,
+        data,
+        backgroundColor: COLORS[idx]
+      };
+    });
+
+    const ctx = document.getElementById("tenureChart").getContext("2d");
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: { labels: departments, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+            ticks: { color: "#dbe3f4" },
+            grid: { color: "rgba(255,255,255,.05)" }
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            ticks: {
+              color: "#dbe3f4",
+              callback: val => asPct ? val + "%" : val
+            },
+            grid: { color: "rgba(255,255,255,.08)" }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: "#dbe3f4" }
+          }
+        }
+      }
+    });
+  }
+
+  async function load() {
+    const res = await fetch(API_URL);
+    const rows = await res.json();
+
+    buildPivot(rows);
+    renderTable();
+    renderChart(document.getElementById("pctToggle").checked);
+  }
+
+  document.getElementById("refreshBtn").addEventListener("click", load);
+
+  document.getElementById("pctToggle").addEventListener("change", () => {
+    renderChart(document.getElementById("pctToggle").checked);
+  });
+
+  load();
+</script>
+
+</body>
+</html>

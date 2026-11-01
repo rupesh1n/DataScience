@@ -1,0 +1,145 @@
+ticket_id,customer_id,ticket_date,issue_type,resolution_days
+1,2,2022-11-05,Billing Issue,4
+2,3,2022-09-19,Slow Internet,5
+3,3,2022-05-03,Plan Upgrade,1
+4,3,2024-02-04,Billing Issue,7
+5,3,2022-05-13,Complaint,7
+6,3,2023-12-22,Complaint,4
+7,3,2023-07-27,Network Issue,6
+8,4,2024-01-30,Plan Upgrade,1
+9,4,2022-01-20,Network Issue,8
+10,4,2022-11-17,Plan Upgrade,10
+11,5,2023-02-19,Slow Internet,7
+12,5,2022-04-28,Network Issue,7
+13,5,2022-11-29,Complaint,3
+14,5,2023-04-17,Network Issue,6
+15,6,2022-04-19,Plan Upgrade,4
+16,6,2023-08-27,Complaint,7
+17,6,2022-03-22,Slow Internet,7
+18,7,2022-12-14,Slow Internet,4
+19,7,2024-03-08,Network Issue,3
+20,7,2023-06-07,Complaint,2
+21,7,2023-06-07,Slow Internet,4
+22,7,2022-12-26,Billing Issue,3
+23,9,2022-09-20,Billing Issue,4
+24,10,2022-06-06,Billing Issue,2
+25,10,2024-03-02,Plan Upgrade,8
+26,10,2024-02-12,Complaint,10
+27,10,2023-04-05,Complaint,10
+28,11,2023-10-05,Billing Issue,6
+29,11,2023-03-27,Plan Upgrade,2
+30,12,2023-10-09,Slow Internet,5
+31,12,2023-08-29,Slow Internet,1
+32,12,2023-06-04,Slow Internet,2
+33,13,2023-04-08,Network Issue,1
+34,13,2023-01-13,Network Issue,5
+35,13,2023-10-23,Complaint,2
+36,14,2023-06-04,Plan Upgrade,7
+37,14,2023-08-18,Network Issue,9
+38,14,2023-04-06,Billing Issue,10
+39,14,2022-11-26,Plan Upgrade,10
+40,15,2022-06-04,Plan Upgrade,1
+41,15,2022-04-16,Network Issue,6
+42,15,2023-06-01,Network Issue,3
+43,15,2022-09-11,Plan Upgrade,8
+44,16,2023-06-20,Billing Issue,10
+45,16,2023-01-08,Slow Internet,6
+46,16,2023-02-01,Slow Internet,7
+47,16,2023-11-27,Network Issue,10
+48,17,2023-10-09,Network Issue,6
+49,17,2022-12-04,Complaint,2
+50,17,2023-11-26,Slow Internet,7
+51,17,2022-09-16,Billing Issue,10
+52,17,2022-12-08,Complaint,2
+53,17,2023-11-11,Slow Internet,3
+54,18,2023-11-03,Billing Issue,7
+55,18,2023-09-02,Slow Internet,2
+56,19,2023-01-21,Billing Issue,6
+57,19,2023-11-18,Network Issue,9
+58,19,2023-10-24,Complaint,7
+59,19,2023-01-06,Slow Internet,1
+60,20,2022-07-04,Slow Internet,4
+61,20,2024-02-24,Billing Issue,8
+62,21,2022-05-21,Network Issue,3
+63,22,2022-04-14,Complaint,9
+64,22,2024-01-27,Network Issue,9
+65,23,2022-12-11,Billing Issue,10
+66,23,2023-09-04,Billing Issue,7
+67,23,2022-06-16,Complaint,3
+68,23,2022-06-19,Network Issue,8
+69,23,2023-02-25,Billing Issue,6
+70,24,2023-09-18,Plan Upgrade,5
+71,24,2022-08-28,Billing Issue,9
+72,24,2022-11-13,Billing Issue,8
+73,25,2023-11-26,Plan Upgrade,10
+74,25,2023-04-18,Plan Upgrade,5
+75,26,2023-06-25,Billing Issue,7
+76,26,2022-07-24,Billing Issue,10
+77,26,2022-09-14,Plan Upgrade,1
+78,26,2023-01-16,Network Issue,9
+79,27,2023-06-13,Slow Internet,2
+80,27,2022-03-27,Slow Internet,3
+81,27,2023-04-06,Billing Issue,9
+82,27,2023-03-24,Billing Issue,2
+83,27,2023-04-07,Network Issue,6
+84,28,2022-02-24,Complaint,7
+85,28,2023-01-18,Plan Upgrade,4
+86,28,2022-03-25,Billing Issue,6
+87,30,2022-04-12,Billing Issue,6
+88,30,2022-05-21,Slow Internet,1
+89,31,2023-04-29,Plan Upgrade,3
+90,31,2023-04-05,Network Issue,10
+91,31,2022-03-23,Slow Internet,1
+92,31,2022-08-09,Complaint,3
+93,31,2024-01-15,Complaint,10
+94,31,2023-03-10,Slow Internet,2
+95,32,2022-11-05,Network Issue,2
+96,33,2023-03-06,Plan Upgrade,10
+97,36,2023-05-27,Complaint,10
+98,36,2022-01-17,Complaint,9
+99,36,2022-09-05,Slow Internet,3
+100,36,2023-03-16,Complaint,1
+101,36,2022-12-28,Complaint,4
+102,36,2023-03-03,Network Issue,3
+103,37,2023-01-05,Complaint,2
+104,37,2023-07-12,Complaint,9
+105,37,2023-07-22,Plan Upgrade,1
+106,37,2023-04-27,Plan Upgrade,1
+107,38,2022-09-17,Slow Internet,1
+108,38,2022-03-11,Billing Issue,6
+109,39,2023-11-04,Complaint,2
+110,39,2024-01-23,Billing Issue,6
+111,39,2022-02-15,Complaint,6
+112,39,2022-12-13,Plan Upgrade,3
+113,39,2023-12-14,Billing Issue,8
+114,40,2022-05-19,Plan Upgrade,2
+115,40,2022-02-07,Billing Issue,5
+116,40,2022-02-14,Network Issue,4
+117,40,2022-11-20,Complaint,5
+118,40,2023-02-12,Plan Upgrade,9
+119,40,2022-09-17,Billing Issue,1
+120,41,2023-01-01,Slow Internet,1
+121,41,2022-10-07,Slow Internet,2
+122,42,2023-02-14,Plan Upgrade,8
+123,42,2022-12-14,Plan Upgrade,3
+124,42,2023-12-10,Slow Internet,8
+125,43,2023-06-16,Network Issue,5
+126,43,2024-01-15,Network Issue,7
+127,43,2023-03-17,Billing Issue,10
+128,43,2023-07-13,Slow Internet,5
+129,43,2022-04-16,Slow Internet,2
+130,43,2023-11-08,Slow Internet,5
+131,44,2023-09-10,Billing Issue,7
+132,44,2023-12-08,Slow Internet,8
+133,44,2023-04-03,Slow Internet,1
+134,45,2023-03-22,Network Issue,5
+135,45,2022-03-18,Slow Internet,7
+136,45,2023-06-10,Network Issue,3
+137,45,2022-05-27,Plan Upgrade,10
+138,47,2022-03-10,Slow Internet,4
+139,48,2023-01-28,Network Issue,10
+140,48,2023-09-12,Plan Upgrade,3
+141,49,2023-01-16,Network Issue,8
+142,49,2023-08-11,Complaint,3
+143,50,2023-02-12,Slow Internet,6
+144,50,2022-09-13,Network Issue,2

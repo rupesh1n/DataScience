@@ -1,0 +1,9 @@
+
+<form method="post" action="{% url 'todos:postuserdetails'%}">
+    {% csrf_token %} 
+Name:<input type="text" name="name">
+Email:<input type="text" name="email">
+Age:<input type="text" name="age">
+<button type="submit">Submit</button>
+<button type="reset">Clear</button>
+</form>

@@ -1,0 +1,10 @@
+{
+  "store": "TechMart",
+  "sales": [
+    {"id": 1, "product": "Laptop", "qty": 3, "price": 75000, "rating": 4.5},
+    {"id": 2, "product": "Phone",  "qty": 10,"price": 25000, "rating": 4.2},
+    {"id": 3, "product": "Tablet", "qty": 5, "price": 18000, "rating": null},
+    {"id": 4, "product": "Watch",  "qty": 8, "price": 12000, "rating": 4.8},
+    {"id": 5, "product": "Laptop", "qty": 2, "price": 75000, "rating": 4.1}
+  ]
+}

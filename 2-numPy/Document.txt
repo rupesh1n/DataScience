@@ -1,0 +1,3 @@
+Install major package
+
+pip install -U pandas numpy matplotlib seaborn scikit-learn catboost polars pyarrow openpyxl sqlalchemy lxml html5lib beautifulsoup4
